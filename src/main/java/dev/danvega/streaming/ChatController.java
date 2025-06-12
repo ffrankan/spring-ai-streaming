@@ -1,6 +1,7 @@
 package dev.danvega.streaming;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -22,7 +23,7 @@ public class ChatController {
                 .content();
     }
 
-    @GetMapping("/stream")
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> chatWithStream(@RequestParam String message) {
         return chatClient.prompt()
                 .user(message)

@@ -25,14 +25,13 @@ public class ChatController {
 
     // 流式SSE接口，兼容ChatGPT风格：每次对话新建SSE连接
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<ServerSentEvent<String>> stream(@RequestParam String message, @RequestParam String conversationId) {
+    public Flux<String> stream(@RequestParam String message, @RequestParam String conversationId) {
         return chatClient.prompt()
                 .user(message)
                 .advisors(new MessageChatMemoryAdvisor(chatMemory, conversationId, 20))
                 .stream()
                 .content()
-                .map(data -> ServerSentEvent.builder(data).build())
-                .concatWith(Flux.just(ServerSentEvent.builder("[DONE]").build()));
+                .concatWith(Flux.just("[DONE]"));
     }
 
 }

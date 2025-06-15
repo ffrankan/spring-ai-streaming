@@ -4,12 +4,12 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.http.MediaType;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @CrossOrigin
@@ -31,7 +31,7 @@ public class ChatController {
                 .advisors(new MessageChatMemoryAdvisor(chatMemory, conversationId, 20))
                 .stream()
                 .content()
-                .concatWith(Flux.just("[DONE]"));
+                .concatWith(Mono.just("[DONE]"));
     }
 
 }
